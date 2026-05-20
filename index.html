@@ -1,0 +1,1224 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WrestHouse | Заявка на заселение</title>
+    <meta
+      name="description"
+      content="Одностраничный сайт WrestHouse для заполнения заявки на заселение в дом для борцов."
+    />
+    <style>
+      :root {
+        --bg: #d8d0c5;
+        --bg-soft: #ebe2d7;
+        --ink: #0c1830;
+        --ink-soft: #1a3367;
+        --mat-blue: #1f4f9b;
+        --mat-red: #a1241d;
+        --mat-orange: #d85c1d;
+        --mat-gold: #e0aa25;
+        --card: rgba(255, 250, 244, 0.8);
+        --line: rgba(12, 24, 48, 0.14);
+        --shadow: 0 28px 60px rgba(12, 24, 48, 0.18);
+        --radius: 28px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+        color: var(--ink);
+        background:
+          radial-gradient(circle at top left, rgba(224, 170, 37, 0.2), transparent 24rem),
+          radial-gradient(circle at top right, rgba(161, 36, 29, 0.16), transparent 20rem),
+          linear-gradient(180deg, #e3dace 0%, #d8d0c5 34%, #cfc5b9 100%);
+        min-height: 100vh;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background:
+          radial-gradient(circle at center, transparent 0 21%, rgba(31, 79, 155, 0.09) 21.4% 23%, transparent 23.2%),
+          radial-gradient(circle at center, transparent 0 34%, rgba(216, 92, 29, 0.08) 34.4% 35.6%, transparent 36%);
+        opacity: 0.8;
+        pointer-events: none;
+      }
+
+      img {
+        display: block;
+        max-width: 100%;
+      }
+
+      a {
+        color: inherit;
+      }
+
+      .page {
+        width: min(1180px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 24px 0 56px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 18px;
+        padding: 14px 18px;
+        margin-bottom: 26px;
+        background: rgba(255, 248, 240, 0.56);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.55);
+        border-radius: 999px;
+        box-shadow: 0 12px 28px rgba(12, 24, 48, 0.08);
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .brand-badge {
+        width: 54px;
+        height: 54px;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 2px solid rgba(12, 24, 48, 0.08);
+        box-shadow: 0 10px 24px rgba(12, 24, 48, 0.12);
+      }
+
+      .brand-copy strong,
+      .hero-copy h1,
+      .section-title,
+      .stat strong,
+      .submit-button,
+      .action-button {
+        font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+        letter-spacing: 0.03em;
+      }
+
+      .brand-copy strong {
+        display: block;
+        font-size: 1.35rem;
+        line-height: 1;
+      }
+
+      .brand-copy span {
+        display: block;
+        margin-top: 4px;
+        color: rgba(12, 24, 48, 0.7);
+        font-size: 0.94rem;
+      }
+
+      .topbar-controls {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+
+      .topbar-link {
+        text-decoration: none;
+        color: rgba(12, 24, 48, 0.75);
+        font-weight: 700;
+      }
+
+      .lang-switcher {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px;
+        border-radius: 999px;
+        background: rgba(12, 24, 48, 0.08);
+      }
+
+      .lang-button {
+        border: none;
+        background: transparent;
+        color: var(--ink-soft);
+        font-weight: 800;
+        font-size: 0.88rem;
+        padding: 10px 14px;
+        border-radius: 999px;
+        cursor: pointer;
+      }
+
+      .lang-button.is-active {
+        background: var(--ink);
+        color: #fff8ef;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: 1.12fr 0.88fr;
+        gap: 26px;
+        margin-bottom: 26px;
+      }
+
+      .hero-panel,
+      .form-panel,
+      .info-panel,
+      .result-panel {
+        background: var(--card);
+        backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+      }
+
+      .hero-panel {
+        padding: 34px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-panel::after {
+        content: "";
+        position: absolute;
+        right: -54px;
+        bottom: -54px;
+        width: 220px;
+        height: 220px;
+        border-radius: 50%;
+        background:
+          radial-gradient(circle, rgba(224, 170, 37, 0.92) 0 22%, rgba(216, 92, 29, 0.86) 22% 42%, rgba(31, 79, 155, 0.85) 42% 60%, transparent 61%);
+        opacity: 0.3;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(12, 24, 48, 0.08);
+        color: var(--ink-soft);
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-size: 0.78rem;
+      }
+
+      .hero-copy h1 {
+        margin: 18px 0 12px;
+        font-size: clamp(3.1rem, 8vw, 5.4rem);
+        line-height: 0.92;
+        text-transform: uppercase;
+      }
+
+      html[lang="en"] .hero-copy h1 {
+        font-size: clamp(2.35rem, 6.2vw, 4.7rem);
+        line-height: 0.96;
+        letter-spacing: 0.015em;
+      }
+
+      .hero-copy p {
+        max-width: 44rem;
+        margin: 0;
+        font-size: 1.08rem;
+        line-height: 1.65;
+        color: rgba(12, 24, 48, 0.78);
+      }
+
+      .hero-actions {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 14px;
+        margin-top: 24px;
+      }
+
+      .action-button,
+      .submit-button {
+        border: none;
+        border-radius: 18px;
+        text-decoration: none;
+        cursor: pointer;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+      }
+
+      .action-button {
+        padding: 14px 18px;
+        font-size: 1rem;
+      }
+
+      .action-button.primary,
+      .submit-button {
+        background: linear-gradient(135deg, var(--mat-red), var(--mat-orange));
+        color: #fff8ef;
+        box-shadow: 0 14px 28px rgba(161, 36, 29, 0.3);
+      }
+
+      .action-button:hover,
+      .submit-button:hover {
+        transform: translateY(-2px);
+      }
+
+      .stats {
+        margin-top: 28px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 14px;
+      }
+
+      .stat {
+        padding: 18px;
+        border-radius: 22px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.52), rgba(255, 255, 255, 0.28));
+        border: 1px solid rgba(12, 24, 48, 0.06);
+      }
+
+      .stat strong {
+        display: block;
+        font-size: 2.2rem;
+        line-height: 1;
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 8px;
+        color: rgba(12, 24, 48, 0.72);
+        line-height: 1.45;
+      }
+
+      .hero-visual {
+        display: grid;
+        gap: 20px;
+      }
+
+      .logo-card {
+        padding: 22px;
+      }
+
+      .logo-frame {
+        background: linear-gradient(180deg, rgba(255, 252, 248, 0.95), rgba(244, 238, 231, 0.85));
+        border-radius: 24px;
+        padding: 16px;
+        border: 1px solid rgba(12, 24, 48, 0.08);
+      }
+
+      .logo-frame img {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        border-radius: 18px;
+      }
+
+      .info-strip {
+        padding: 24px;
+      }
+
+      .section-title {
+        margin: 0 0 12px;
+        font-size: 2rem;
+        line-height: 1;
+        text-transform: uppercase;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 16px;
+      }
+
+      .chip {
+        padding: 10px 14px;
+        border-radius: 999px;
+        background: rgba(12, 24, 48, 0.08);
+        font-weight: 700;
+        color: var(--ink-soft);
+      }
+
+      .main-grid {
+        display: grid;
+        grid-template-columns: 0.9fr 1.1fr;
+        gap: 26px;
+        align-items: start;
+      }
+
+      .info-panel,
+      .form-panel,
+      .result-panel {
+        padding: 28px;
+      }
+
+      .feature-list,
+      .notes-list,
+      .include-list {
+        display: grid;
+        gap: 14px;
+        margin-top: 18px;
+      }
+
+      .feature,
+      .note,
+      .include-card {
+        padding: 16px 18px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.42);
+        border: 1px solid rgba(12, 24, 48, 0.06);
+      }
+
+      .feature strong,
+      .note strong,
+      .include-card strong {
+        display: block;
+        margin-bottom: 6px;
+      }
+
+      .feature p,
+      .note p,
+      .include-card p,
+      .info-panel > p,
+      .form-panel > p,
+      .result-panel > p {
+        margin: 0;
+        color: rgba(12, 24, 48, 0.76);
+        line-height: 1.6;
+      }
+
+      .mat-card {
+        margin-top: 18px;
+        padding: 22px;
+        border-radius: 24px;
+        color: #fffaf4;
+        background:
+          radial-gradient(circle at center, var(--mat-gold) 0 18%, var(--mat-orange) 18% 34%, var(--mat-blue) 34% 50%, rgba(12, 24, 48, 0.98) 50% 100%);
+        box-shadow: inset 0 0 0 12px rgba(255, 255, 255, 0.08);
+      }
+
+      .mat-card strong {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+      }
+
+      form {
+        margin-top: 20px;
+      }
+
+      .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+      }
+
+      .field {
+        display: grid;
+        gap: 8px;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+
+      label {
+        font-size: 0.95rem;
+        font-weight: 800;
+        color: var(--ink-soft);
+      }
+
+      input,
+      select,
+      textarea {
+        width: 100%;
+        border: 1px solid rgba(12, 24, 48, 0.14);
+        border-radius: 18px;
+        padding: 15px 16px;
+        font: inherit;
+        color: var(--ink);
+        background: rgba(255, 255, 255, 0.72);
+        outline: none;
+      }
+
+      textarea {
+        min-height: 130px;
+        resize: vertical;
+      }
+
+      .checkbox {
+        display: flex;
+        gap: 12px;
+        align-items: flex-start;
+        margin-top: 16px;
+        padding: 16px;
+        border-radius: 20px;
+        background: rgba(12, 24, 48, 0.06);
+      }
+
+      .checkbox input {
+        width: 20px;
+        height: 20px;
+        margin-top: 2px;
+      }
+
+      .checkbox label {
+        font-size: 0.94rem;
+        line-height: 1.5;
+      }
+
+      .form-footer {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 14px;
+        align-items: center;
+        margin-top: 18px;
+      }
+
+      .helper {
+        color: rgba(12, 24, 48, 0.62);
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+
+      .submit-button {
+        padding: 16px 22px;
+        font-size: 1rem;
+      }
+
+      .result-panel {
+        margin-top: 22px;
+        display: none;
+      }
+
+      .result-panel.is-visible {
+        display: block;
+      }
+
+      .result-box {
+        margin-top: 18px;
+        padding: 18px;
+        border-radius: 22px;
+        background: rgba(12, 24, 48, 0.92);
+        color: #fff8ef;
+        line-height: 1.7;
+      }
+
+      .footnote {
+        margin-top: 12px;
+        font-size: 0.9rem;
+        color: rgba(12, 24, 48, 0.64);
+      }
+
+      .mobile-cta {
+        display: none;
+      }
+
+      @media (max-width: 980px) {
+        .hero,
+        .main-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .stats {
+          grid-template-columns: 1fr;
+        }
+      }
+
+      @media (max-width: 720px) {
+        .page {
+          width: min(100% - 20px, 1180px);
+          padding-top: 16px;
+          padding-bottom: 110px;
+        }
+
+        .topbar {
+          border-radius: 28px;
+          align-items: flex-start;
+          flex-direction: column;
+        }
+
+        .topbar-controls {
+          width: 100%;
+          justify-content: space-between;
+          flex-wrap: wrap;
+        }
+
+        .hero-panel,
+        .info-panel,
+        .form-panel,
+        .result-panel,
+        .logo-card,
+        .info-strip {
+          padding: 22px;
+        }
+
+        .form-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .hero-copy h1 {
+          font-size: clamp(2.5rem, 18vw, 4rem);
+        }
+
+        html[lang="en"] .hero-copy h1 {
+          font-size: clamp(2.15rem, 13vw, 3.4rem);
+        }
+
+        .mobile-cta {
+          position: fixed;
+          left: 14px;
+          right: 14px;
+          bottom: 14px;
+          z-index: 10;
+          display: flex;
+          justify-content: center;
+          padding: 10px;
+          background: rgba(255, 248, 240, 0.82);
+          backdrop-filter: blur(14px);
+          border-radius: 22px;
+          box-shadow: 0 16px 34px rgba(12, 24, 48, 0.15);
+        }
+
+        .mobile-cta .action-button {
+          width: 100%;
+          text-align: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-badge">
+            <img src="./assets/18051522290451939.jpg" alt="Аватар WrestHouse" />
+          </div>
+          <div class="brand-copy">
+            <strong>WrestHouse</strong>
+            <span data-i18n="brandSubtitle">Live. Train. Win. | Заявка на заселение</span>
+          </div>
+        </div>
+        <div class="topbar-controls">
+          <a class="topbar-link" href="#application" data-i18n="jumpToForm">Перейти к заявке</a>
+          <div class="lang-switcher" aria-label="Language switcher">
+            <button class="lang-button is-active" type="button" data-lang="ru" aria-pressed="true">RU</button>
+            <button class="lang-button" type="button" data-lang="en" aria-pressed="false">EN</button>
+          </div>
+        </div>
+      </header>
+
+      <section class="hero">
+        <article class="hero-panel">
+          <span class="eyebrow" data-i18n="eyebrow">Спортивная база • Хасавюрт, Дагестан</span>
+          <div class="hero-copy">
+            <h1 data-i18n="heroTitle">Заселение в дом для борцов</h1>
+            <p data-i18n="heroDescription">
+              WrestHouse — пространство для борцов и спортсменов других дисциплин, которые приезжают жить, тренироваться и готовиться к стартам. Заполните короткую заявку, и мы свяжемся с вами по размещению, датам и условиям проживания.
+            </p>
+          </div>
+
+          <div class="hero-actions">
+            <a class="action-button primary" href="#application" data-i18n="applyNow">Заполнить заявку</a>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <strong data-i18n="stat1Value">24/7</strong>
+              <span data-i18n="stat1Text">Режим для проживания, сборов и подготовки спортсменов разных направлений</span>
+            </div>
+            <div class="stat">
+              <strong data-i18n="stat2Value">1 мин</strong>
+              <span data-i18n="stat2Text">Среднее время заполнения заявки на проживание</span>
+            </div>
+            <div class="stat">
+              <strong data-i18n="stat3Value">WREST</strong>
+              <span data-i18n="stat3Text">Хасавюрт — кузница чемпионов вольной борьбы: высокий уровень, конкуренция и характер победителей.</span>
+            </div>
+          </div>
+        </article>
+
+        <div class="hero-visual">
+          <aside class="hero-panel logo-card">
+            <div class="logo-frame">
+              <img src="./assets/18051522290451939.jpg" alt="Логотип WrestHouse" />
+            </div>
+          </aside>
+
+          <aside class="hero-panel info-strip">
+            <h2 class="section-title" data-i18n="whyTitle">Почему WrestHouse</h2>
+            <p data-i18n="whyDescription">
+              Здесь живут и тренируются спортсмены, которые приезжают на сборы, подготовку к турнирам и интенсивную работу над результатом. Спокойный режим, спортивная среда и фокус только на тренировках на базе «Академии спорта» им. Сайтиева Б.Х. WrestHouse открыт не только для борьбы, но и для других спортивных направлений.
+            </p>
+            <div class="chips">
+              <span class="chip">WrestHouse</span>
+              <span class="chip" data-i18n="chipAthletesHome">Дом для спортсменов</span>
+              <span class="chip" data-i18n="chipKhasavyurt">Хасавюрт, Дагестан</span>
+              <span class="chip" data-i18n="chipAcademy">«Академия спорта» им. Сайтиева Б.Х.</span>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="main-grid">
+        <aside class="info-panel">
+          <h2 class="section-title" data-i18n="whatToIncludeTitle">Что указать</h2>
+          <p data-i18n="whatToIncludeDesc">
+            Заполните основные данные о спортсмене, чтобы мы быстрее подтвердили заселение и помогли подобрать удобный вариант проживания.
+          </p>
+
+          <div class="include-list">
+            <div class="include-card">
+              <strong data-i18n="includeTitle">Что входит</strong>
+              <p data-i18n="includeText">Проживание, спортивная среда, распределение по уровню, связь с администратором по размещению и организационным вопросам.</p>
+            </div>
+            <div class="include-card">
+              <strong data-i18n="trustTitle">Среда чемпионов</strong>
+              <p data-i18n="trustText">Хасавюрт — одна из самых сильных школ вольной борьбы. Здесь растут победители, а высокий уровень окружения задаёт темп каждому спортсмену.</p>
+            </div>
+            <div class="include-card">
+              <strong data-i18n="afterApplyTitle">Что будет после заявки</strong>
+              <p data-i18n="afterApplyText">После отправки администратор получит заявку в Telegram, уточнит даты, формат размещения и при необходимости детали тренировочного процесса.</p>
+            </div>
+          </div>
+
+          <div class="feature-list">
+            <div class="feature">
+              <strong data-i18n="featureDatesTitle">Даты приезда и выезда</strong>
+              <p data-i18n="featureDatesText">Нужны, чтобы понять занятость мест и предложить подходящий вариант размещения.</p>
+            </div>
+            <div class="feature">
+              <strong data-i18n="featureSportTitle">Вид спорта, уровень и цель приезда</strong>
+              <p data-i18n="featureSportText">Помогают понять формат приезда: сборы, подготовка к турниру, неделя или длительное проживание.</p>
+            </div>
+            <div class="feature">
+              <strong data-i18n="featureContactTitle">Контакт для быстрой связи</strong>
+              <p data-i18n="featureContactText">Телефон, WhatsApp или Telegram, чтобы оперативно подтвердить заявку.</p>
+            </div>
+          </div>
+
+          <div class="mat-card">
+            <strong data-i18n="matTitle">WrestHouse — дом для спортсменов</strong>
+            <span data-i18n="matText">Оставьте заявку, и мы свяжемся с вами по датам, размещению и деталям приезда.</span>
+          </div>
+
+          <div class="notes-list">
+            <div class="note">
+              <strong data-i18n="noteGroupTitle">Распределение по уровню</strong>
+              <p data-i18n="noteGroupText">Спортсмены распределяются по уровню подготовки и качеству борьбы. В зависимости от уровня есть возможность попасть в основную группу под руководством олимпийского чемпиона, ныне тренера Адама Сайтиева.</p>
+            </div>
+            <div class="note">
+              <strong data-i18n="noteImportantTitle">Что важно указать</strong>
+              <p data-i18n="noteImportantText">Особенно внимательно проверьте даты, контакты и дополнительные пожелания по проживанию или сопровождению.</p>
+            </div>
+          </div>
+        </aside>
+
+        <section class="form-panel" id="application">
+          <h2 class="section-title" data-i18n="formTitle">Заполнить заявку</h2>
+          <p data-i18n="formDescription">
+            Укажите данные спортсмена, вид спорта, даты приезда и важные детали по проживанию. После этого останется только отправить готовую заявку администратору.
+          </p>
+          <p class="helper" data-i18n="minorRule">Важно: если спортсмену меньше 15 лет, заселение возможно только вместе с личным тренером или сопровождающим.</p>
+
+          <form id="application-form">
+            <div class="form-grid">
+              <div class="field">
+                <label for="fullName" data-i18n="labelFullName">ФИО спортсмена</label>
+                <input id="fullName" name="fullName" type="text" required placeholder="Магомед Алиев" />
+              </div>
+              <div class="field">
+                <label for="age" data-i18n="labelAge">Возраст</label>
+                <input id="age" name="age" type="number" min="8" max="60" required placeholder="16" />
+              </div>
+              <div class="field">
+                <label for="city" data-i18n="labelCity">Город / страна</label>
+                <input id="city" name="city" type="text" required placeholder="Грозный, Россия" />
+              </div>
+              <div class="field">
+                <label for="discipline" data-i18n="labelDiscipline">Вид спорта / дисциплина</label>
+                <input id="discipline" name="discipline" type="text" required placeholder="Вольная борьба" />
+              </div>
+              <div class="field">
+                <label for="contact" data-i18n="labelContact">Телефон / WhatsApp</label>
+                <input id="contact" name="contact" type="text" required placeholder="+7 999 123-45-67" />
+              </div>
+              <div class="field">
+                <label for="telegram" data-i18n="labelTelegram">Telegram</label>
+                <input id="telegram" name="telegram" type="text" placeholder="@magomed_aliyev" />
+              </div>
+              <div class="field">
+                <label for="coach" data-i18n="labelCoach">Тренер / сопровождающий</label>
+                <input id="coach" name="coach" type="text" placeholder="Ибрагим Магомедов" />
+              </div>
+              <div class="field">
+                <label for="weight" data-i18n="labelWeight">Весовая категория</label>
+                <input id="weight" name="weight" type="text" required placeholder="65 кг" />
+              </div>
+              <div class="field">
+                <label for="arrival" data-i18n="labelArrival">Дата заезда</label>
+                <input id="arrival" name="arrival" type="date" required />
+              </div>
+              <div class="field">
+                <label for="departure" data-i18n="labelDeparture">Дата выезда</label>
+                <input id="departure" name="departure" type="date" required />
+              </div>
+              <div class="field">
+                <label for="level" data-i18n="labelLevel">Уровень подготовки</label>
+                <select id="level" name="level" required>
+                  <option value="" data-i18n="optionLevelPlaceholder">Выберите уровень</option>
+                  <option data-i18n="optionLevelBeginner">Начинающий</option>
+                  <option data-i18n="optionLevelCompetitive">Уверенный соревновательный</option>
+                  <option data-i18n="optionLevelMaster">Кандидат / мастер спорта</option>
+                  <option data-i18n="optionLevelPro">Профессиональный спортсмен</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="goal" data-i18n="labelGoal">Цель приезда</label>
+                <select id="goal" name="goal" required>
+                  <option value="" data-i18n="optionGoalPlaceholder">Выберите цель</option>
+                  <option data-i18n="optionGoalCamp">Сборы и проживание</option>
+                  <option data-i18n="optionGoalCompetition">Подготовка к соревнованиям</option>
+                  <option data-i18n="optionGoalLongStay">Долгосрочное размещение</option>
+                  <option data-i18n="optionGoalShortVisit">Краткосрочный визит / неделя</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="room" data-i18n="labelRoom">Формат размещения</label>
+                <select id="room" name="room" required>
+                  <option value="" data-i18n="optionRoomPlaceholder">Выберите вариант</option>
+                  <option data-i18n="optionRoomShared">Общая комната</option>
+                  <option data-i18n="optionRoomHotel">Отель в черте города (18+)</option>
+                  <option data-i18n="optionRoomWhole">Комната целиком для 2 человек</option>
+                  <option data-i18n="optionRoomAny">Подойдёт любой вариант</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label for="requests" data-i18n="labelRequests">Пожелания и детали</label>
+                <textarea
+                  id="requests"
+                  name="requests"
+                  placeholder="Нужен трансфер, особый режим питания, приезжаю с тренером, нужны спокойные условия для восстановления, готов доплачивать за индивидуальную работу."
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="checkbox">
+              <input id="consent" name="consent" type="checkbox" required />
+              <label for="consent" data-i18n="consentText">Подтверждаю, что данные указаны верно, и согласен(на) на обратную связь по заявке на заселение.</label>
+            </div>
+
+            <div class="form-footer">
+              <p class="helper" data-i18n="formHelper">После нажатия кнопки заявка будет отправлена администратору WrestHouse.</p>
+              <button class="submit-button" id="submit-button" type="submit" data-i18n="submitButton">Отправить заявку</button>
+            </div>
+          </form>
+
+          <div class="result-panel" id="result-panel">
+            <h3 class="section-title" data-i18n="resultTitle">Статус заявки</h3>
+            <p data-i18n="resultDescription">После отправки здесь появится только подтверждение получения заявки.</p>
+            <div class="result-box" id="result-box">Ожидаем отправку заявки.</div>
+            <p class="footnote" id="result-note">Детали заявки получает только администратор.</p>
+          </div>
+        </section>
+      </section>
+    </div>
+
+    <div class="mobile-cta">
+      <a class="action-button primary" href="#application" data-i18n="mobileApply">Заполнить заявку</a>
+    </div>
+
+    <script>
+      const TELEGRAM_BOT_TOKEN = "8615710154:AAE0tQIMz1UBLAzS-FXh6iVEUsQkhN9bH_M";
+      const TELEGRAM_CHAT_ID = "708300138";
+      const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      const LANGUAGE_STORAGE_KEY = "wresthouse-language";
+
+      const translations = {
+        ru: {
+          documentTitle: "WrestHouse | Заявка на заселение",
+          metaDescription: "Одностраничный сайт WrestHouse для заполнения заявки на заселение в дом для борцов.",
+          brandSubtitle: "Live. Train. Win. | Заявка на заселение",
+          jumpToForm: "Перейти к заявке",
+          eyebrow: "Спортивная база • Хасавюрт, Дагестан",
+          heroTitle: "Заселение в дом для борцов",
+          heroDescription: "WrestHouse — пространство для борцов и спортсменов других дисциплин, которые приезжают жить, тренироваться и готовиться к стартам. Заполните короткую заявку, и мы свяжемся с вами по размещению, датам и условиям проживания.",
+          applyNow: "Заполнить заявку",
+          mobileApply: "Подать заявку",
+          stat1Value: "24/7",
+          stat1Text: "Режим для проживания, сборов и подготовки спортсменов разных направлений",
+          stat2Value: "1 мин",
+          stat2Text: "Среднее время заполнения заявки на проживание",
+          stat3Value: "WREST",
+          stat3Text: "Хасавюрт — кузница чемпионов вольной борьбы: высокий уровень, конкуренция и характер победителей.",
+          whyTitle: "Почему WrestHouse",
+          whyDescription: "Здесь живут и тренируются спортсмены, которые приезжают на сборы, подготовку к турнирам и интенсивную работу над результатом. Спокойный режим, спортивная среда и фокус только на тренировках на базе «Академии спорта» им. Сайтиева Б.Х. WrestHouse открыт не только для борьбы, но и для других спортивных направлений.",
+          chipAthletesHome: "Дом для спортсменов",
+          chipKhasavyurt: "Хасавюрт, Дагестан",
+          chipAcademy: "«Академия спорта» им. Сайтиева Б.Х.",
+          whatToIncludeTitle: "Что указать",
+          whatToIncludeDesc: "Заполните основные данные о спортсмене, чтобы мы быстрее подтвердили заселение и помогли подобрать удобный вариант проживания.",
+          includeTitle: "Что входит",
+          includeText: "Проживание, спортивная среда, распределение по уровню, связь с администратором по размещению и организационным вопросам.",
+          trustTitle: "Среда чемпионов",
+          trustText: "Хасавюрт — одна из самых сильных школ вольной борьбы. Здесь растут победители, а высокий уровень окружения задаёт темп каждому спортсмену.",
+          afterApplyTitle: "Что будет после заявки",
+          afterApplyText: "После отправки администратор получит заявку в Telegram, уточнит даты, формат размещения и при необходимости детали тренировочного процесса.",
+          featureDatesTitle: "Даты приезда и выезда",
+          featureDatesText: "Нужны, чтобы понять занятость мест и предложить подходящий вариант размещения.",
+          featureSportTitle: "Вид спорта, уровень и цель приезда",
+          featureSportText: "Помогают понять формат приезда: сборы, подготовка к турниру, неделя или длительное проживание.",
+          featureContactTitle: "Контакт для быстрой связи",
+          featureContactText: "Телефон, WhatsApp или Telegram, чтобы оперативно подтвердить заявку.",
+          matTitle: "WrestHouse — дом для спортсменов",
+          matText: "Оставьте заявку, и мы свяжемся с вами по датам, размещению и деталям приезда.",
+          noteGroupTitle: "Распределение по уровню",
+          noteGroupText: "Спортсмены распределяются по уровню подготовки и качеству борьбы. В зависимости от уровня есть возможность попасть в основную группу под руководством олимпийского чемпиона, ныне тренера Адама Сайтиева.",
+          noteImportantTitle: "Что важно указать",
+          noteImportantText: "Особенно внимательно проверьте даты, контакты и дополнительные пожелания по проживанию или сопровождению.",
+          formTitle: "Заполнить заявку",
+          formDescription: "Укажите данные спортсмена, вид спорта, даты приезда и важные детали по проживанию. После этого останется только отправить готовую заявку администратору.",
+          minorRule: "Важно: если спортсмену меньше 15 лет, заселение возможно только вместе с личным тренером или сопровождающим.",
+          labelFullName: "ФИО спортсмена",
+          labelAge: "Возраст",
+          labelCity: "Город / страна",
+          labelDiscipline: "Вид спорта / дисциплина",
+          labelContact: "Телефон / WhatsApp",
+          labelTelegram: "Telegram",
+          labelCoach: "Тренер / сопровождающий",
+          labelWeight: "Весовая категория",
+          labelArrival: "Дата заезда",
+          labelDeparture: "Дата выезда",
+          labelLevel: "Уровень подготовки",
+          labelGoal: "Цель приезда",
+          labelRoom: "Формат размещения",
+          labelRequests: "Пожелания и детали",
+          optionLevelPlaceholder: "Выберите уровень",
+          optionLevelBeginner: "Начинающий",
+          optionLevelCompetitive: "Уверенный соревновательный",
+          optionLevelMaster: "Кандидат / мастер спорта",
+          optionLevelPro: "Профессиональный спортсмен",
+          optionGoalPlaceholder: "Выберите цель",
+          optionGoalCamp: "Сборы и проживание",
+          optionGoalCompetition: "Подготовка к соревнованиям",
+          optionGoalLongStay: "Долгосрочное размещение",
+          optionGoalShortVisit: "Краткосрочный визит / неделя",
+          optionRoomPlaceholder: "Выберите вариант",
+          optionRoomShared: "Общая комната",
+          optionRoomHotel: "Отель в черте города (18+)",
+          optionRoomWhole: "Комната целиком для 2 человек",
+          optionRoomAny: "Подойдёт любой вариант",
+          consentText: "Подтверждаю, что данные указаны верно, и согласен(на) на обратную связь по заявке на заселение.",
+          formHelper: "После нажатия кнопки заявка будет отправлена администратору WrestHouse.",
+          submitButton: "Отправить заявку",
+          resultTitle: "Статус заявки",
+          resultDescription: "После отправки здесь появится только подтверждение получения заявки.",
+          resultStateIdle: { box: "Ожидаем отправку заявки.", note: "Детали заявки получает только администратор." },
+          resultStateDateError: { box: "Проверьте заявку: дата выезда не может быть раньше даты заезда.", note: "Исправьте данные и отправьте заявку ещё раз." },
+          resultStateAgeError: { box: "Для спортсменов младше 15 лет нужно указать личного тренера или сопровождающего.", note: "Добавьте данные сопровождающего и отправьте заявку ещё раз." },
+          resultStateSending: { box: "Заявка отправляется. Пожалуйста, подождите несколько секунд.", note: "Идёт отправка заявки администратору." },
+          resultStateSuccess: { box: "Спасибо! Ваша заявка успешно отправлена.", note: "Администратор получил заявку и свяжется с вами после проверки." },
+          resultStateFailure: { box: "Не удалось отправить заявку автоматически.", note: "Попробуйте ещё раз чуть позже или свяжитесь с администратором напрямую." },
+          telegramMessageTitle: "Заявка на заселение WrestHouse",
+          telegramFieldFullName: "ФИО",
+          telegramFieldAge: "Возраст",
+          telegramFieldCity: "Город / страна",
+          telegramFieldDiscipline: "Вид спорта / дисциплина",
+          telegramFieldContact: "Телефон / WhatsApp",
+          telegramFieldTelegram: "Telegram",
+          telegramFieldCoach: "Тренер / сопровождающий",
+          telegramFieldWeight: "Весовая категория",
+          telegramFieldArrival: "Дата заезда",
+          telegramFieldDeparture: "Дата выезда",
+          telegramFieldLevel: "Уровень",
+          telegramFieldGoal: "Цель приезда",
+          telegramFieldRoom: "Формат размещения",
+          telegramFieldRequests: "Пожелания",
+          telegramNotSpecified: "не указано",
+          telegramNotSpecifiedMasc: "не указан",
+          telegramNoExtraRequests: "без дополнительных пожеланий",
+          sendingButton: "Отправка...",
+          placeholderFullName: "Магомед Алиев",
+          placeholderAge: "16",
+          placeholderCity: "Грозный, Россия",
+          placeholderDiscipline: "Вольная борьба",
+          placeholderContact: "+7 999 123-45-67",
+          placeholderTelegram: "@magomed_aliyev",
+          placeholderCoach: "Ибрагим Магомедов",
+          placeholderWeight: "65 кг",
+          placeholderRequests: "Нужен трансфер, особый режим питания, приезжаю с тренером, нужны спокойные условия для восстановления, готов доплачивать за индивидуальную работу."
+        },
+        en: {
+          documentTitle: "WrestHouse | Accommodation Application",
+          metaDescription: "Single-page WrestHouse website for submitting an accommodation application for the wrestling house.",
+          brandSubtitle: "Live. Train. Win. | Accommodation Application",
+          jumpToForm: "Go to application",
+          eyebrow: "Sports Base • Khasavyurt, Dagestan",
+          heroTitle: "Accommodation in the Wrestlers' House",
+          heroDescription: "WrestHouse is a space for wrestlers and athletes from other disciplines who come to live, train, and prepare for competitions. Fill out a short application, and we will contact you about accommodation, dates, and stay details.",
+          applyNow: "Fill out application",
+          mobileApply: "Apply now",
+          stat1Value: "24/7",
+          stat1Text: "A full-time format for living, training camps, and preparation for athletes of different disciplines",
+          stat2Value: "1 min",
+          stat2Text: "Average time needed to complete the accommodation application",
+          stat3Value: "WREST",
+          stat3Text: "Khasavyurt is a true forge of freestyle champions: elite training, fierce competition, and a winners' mindset.",
+          whyTitle: "Why WrestHouse",
+          whyDescription: "Athletes stay and train here when they come for camps, tournament preparation, and focused work on results. Calm routine, sports environment, and full concentration on training at the B.H. Saitiev Sports Academy. WrestHouse is open not only for wrestling, but for other sports as well.",
+          chipAthletesHome: "Home for athletes",
+          chipKhasavyurt: "Khasavyurt, Dagestan",
+          chipAcademy: "B.H. Saitiev Sports Academy",
+          whatToIncludeTitle: "What to include",
+          whatToIncludeDesc: "Fill in the main information about the athlete so we can confirm accommodation faster and offer the best stay option.",
+          includeTitle: "What is included",
+          includeText: "Accommodation, sports environment, level-based group placement, and direct contact with the administrator about stay and organization.",
+          trustTitle: "Champions' environment",
+          trustText: "Khasavyurt is one of the strongest centers of freestyle wrestling. Winners grow here, and the level of the environment pushes every athlete higher.",
+          afterApplyTitle: "What happens next",
+          afterApplyText: "After submission, the administrator receives the application in Telegram and clarifies dates, accommodation format, and training details if needed.",
+          featureDatesTitle: "Arrival and departure dates",
+          featureDatesText: "They help us understand availability and offer a suitable accommodation option.",
+          featureSportTitle: "Sport, level, and purpose of visit",
+          featureSportText: "These details help us understand the visit format: camp, tournament preparation, one week, or long-term accommodation.",
+          featureContactTitle: "Fast contact details",
+          featureContactText: "Phone, WhatsApp, or Telegram helps us confirm the application quickly.",
+          matTitle: "WrestHouse is a home for athletes",
+          matText: "Leave your application, and we will contact you about dates, accommodation, and arrival details.",
+          noteGroupTitle: "Level-based placement",
+          noteGroupText: "Athletes are placed according to their level and wrestling ability. Depending on the level, there is a chance to join the main group led by Olympic champion and current coach Adam Saitiev.",
+          noteImportantTitle: "What matters most",
+          noteImportantText: "Please carefully check dates, contacts, and any additional requests related to accommodation or support.",
+          formTitle: "Fill out the application",
+          formDescription: "Provide the athlete's details, sport, travel dates, and important accommodation notes. After that, the application will be sent to the administrator.",
+          minorRule: "Important: if the athlete is under 15 years old, accommodation is only possible with a personal coach or accompanying adult.",
+          labelFullName: "Athlete full name",
+          labelAge: "Age",
+          labelCity: "City / country",
+          labelDiscipline: "Sport / discipline",
+          labelContact: "Phone / WhatsApp",
+          labelTelegram: "Telegram",
+          labelCoach: "Coach / accompanying adult",
+          labelWeight: "Weight category",
+          labelArrival: "Arrival date",
+          labelDeparture: "Departure date",
+          labelLevel: "Training level",
+          labelGoal: "Purpose of visit",
+          labelRoom: "Accommodation format",
+          labelRequests: "Requests and details",
+          optionLevelPlaceholder: "Select level",
+          optionLevelBeginner: "Beginner",
+          optionLevelCompetitive: "Competitive athlete",
+          optionLevelMaster: "Candidate / master level",
+          optionLevelPro: "Professional athlete",
+          optionGoalPlaceholder: "Select purpose",
+          optionGoalCamp: "Training camp and stay",
+          optionGoalCompetition: "Competition preparation",
+          optionGoalLongStay: "Long-term accommodation",
+          optionGoalShortVisit: "Short stay / week",
+          optionRoomPlaceholder: "Select option",
+          optionRoomShared: "Shared room",
+          optionRoomHotel: "City hotel (18+)",
+          optionRoomWhole: "Whole room for 2 people",
+          optionRoomAny: "Any option works",
+          consentText: "I confirm that the information provided is correct and agree to be contacted regarding this accommodation application.",
+          formHelper: "After clicking the button, the application will be sent to the WrestHouse administrator.",
+          submitButton: "Send application",
+          resultTitle: "Application status",
+          resultDescription: "After submission, only a confirmation message will be shown here.",
+          resultStateIdle: { box: "Waiting for application submission.", note: "Only the administrator sees the application details." },
+          resultStateDateError: { box: "Please check the application: the departure date cannot be earlier than the arrival date.", note: "Correct the data and submit the application again." },
+          resultStateAgeError: { box: "For athletes under 15 years old, a personal coach or accompanying adult must be specified.", note: "Add the accompanying person's details and submit the application again." },
+          resultStateSending: { box: "Your application is being sent. Please wait a few seconds.", note: "The application is being delivered to the administrator." },
+          resultStateSuccess: { box: "Thank you! Your application has been sent successfully.", note: "The administrator has received the application and will contact you after review." },
+          resultStateFailure: { box: "The application could not be sent automatically.", note: "Please try again later or contact the administrator directly." },
+          telegramMessageTitle: "WrestHouse accommodation application",
+          telegramFieldFullName: "Full name",
+          telegramFieldAge: "Age",
+          telegramFieldCity: "City / country",
+          telegramFieldDiscipline: "Sport / discipline",
+          telegramFieldContact: "Phone / WhatsApp",
+          telegramFieldTelegram: "Telegram",
+          telegramFieldCoach: "Coach / accompanying adult",
+          telegramFieldWeight: "Weight category",
+          telegramFieldArrival: "Arrival date",
+          telegramFieldDeparture: "Departure date",
+          telegramFieldLevel: "Level",
+          telegramFieldGoal: "Purpose of visit",
+          telegramFieldRoom: "Accommodation format",
+          telegramFieldRequests: "Requests",
+          telegramNotSpecified: "not specified",
+          telegramNotSpecifiedMasc: "not specified",
+          telegramNoExtraRequests: "no additional requests",
+          sendingButton: "Sending...",
+          placeholderFullName: "Adam Johnson",
+          placeholderAge: "16",
+          placeholderCity: "Nice, France",
+          placeholderDiscipline: "Freestyle wrestling",
+          placeholderContact: "+33 6 12 34 56 78",
+          placeholderTelegram: "@adamjohnson",
+          placeholderCoach: "Michael Brown",
+          placeholderWeight: "65 kg",
+          placeholderRequests: "Airport transfer needed, special meal plan, arriving with coach, quiet conditions needed for recovery, ready to discuss extra individual training work."
+        }
+      };
+
+      const form = document.getElementById("application-form");
+      const submitButton = document.getElementById("submit-button");
+      const resultPanel = document.getElementById("result-panel");
+      const resultBox = document.getElementById("result-box");
+      const resultNote = document.getElementById("result-note");
+      const metaDescription = document.querySelector('meta[name="description"]');
+      const langButtons = document.querySelectorAll(".lang-button");
+
+      let currentLang = localStorage.getItem(LANGUAGE_STORAGE_KEY) || "ru";
+      let currentResultState = "idle";
+
+      const formatDate = (value) => {
+        if (!value) return translations[currentLang].telegramNotSpecified;
+        const date = new Date(value);
+        return new Intl.DateTimeFormat(currentLang === "ru" ? "ru-RU" : "en-US", {
+          day: "2-digit",
+          month: "long",
+          year: "numeric"
+        }).format(date);
+      };
+
+      const renderResultState = () => {
+        const stateKey = `resultState${currentResultState.charAt(0).toUpperCase()}${currentResultState.slice(1)}`;
+        const state = translations[currentLang][stateKey];
+        resultBox.textContent = state.box;
+        resultNote.textContent = state.note;
+      };
+
+      const applyTranslations = (lang) => {
+        currentLang = lang;
+        localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
+        document.documentElement.lang = lang;
+        document.title = translations[lang].documentTitle;
+        metaDescription.setAttribute("content", translations[lang].metaDescription);
+
+        document.querySelectorAll("[data-i18n]").forEach((element) => {
+          const key = element.dataset.i18n;
+          if (translations[lang][key]) element.textContent = translations[lang][key];
+        });
+
+        const placeholderMap = {
+          fullName: "placeholderFullName",
+          age: "placeholderAge",
+          city: "placeholderCity",
+          discipline: "placeholderDiscipline",
+          contact: "placeholderContact",
+          telegram: "placeholderTelegram",
+          coach: "placeholderCoach",
+          weight: "placeholderWeight",
+          requests: "placeholderRequests"
+        };
+
+        Object.entries(placeholderMap).forEach(([id, key]) => {
+          const el = document.getElementById(id);
+          if (el) el.setAttribute("placeholder", translations[lang][key]);
+        });
+
+        langButtons.forEach((button) => {
+          const active = button.dataset.lang === lang;
+          button.classList.toggle("is-active", active);
+          button.setAttribute("aria-pressed", String(active));
+        });
+
+        if (!submitButton.disabled) submitButton.textContent = translations[lang].submitButton;
+        renderResultState();
+      };
+
+      langButtons.forEach((button) => {
+        button.addEventListener("click", () => applyTranslations(button.dataset.lang));
+      });
+
+      const sendTelegramMessage = async (text) => {
+        const response = await fetch(TELEGRAM_API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text })
+        });
+
+        if (!response.ok) throw new Error(`Telegram API responded with status ${response.status}`);
+        const payload = await response.json();
+        if (!payload.ok) throw new Error(payload.description || "Telegram API returned an error");
+        return payload;
+      };
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        const data = new FormData(form);
+        const arrival = data.get("arrival");
+        const departure = data.get("departure");
+        const age = Number(data.get("age"));
+        const coach = String(data.get("coach") || "").trim();
+        const t = translations[currentLang];
+
+        if (arrival && departure && new Date(departure) < new Date(arrival)) {
+          resultPanel.classList.add("is-visible");
+          currentResultState = "dateError";
+          renderResultState();
+          resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        if (age < 15 && !coach) {
+          resultPanel.classList.add("is-visible");
+          currentResultState = "ageError";
+          renderResultState();
+          resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        const message = [
+          t.telegramMessageTitle,
+          "",
+          `${t.telegramFieldFullName}: ${data.get("fullName") || t.telegramNotSpecified}`,
+          `${t.telegramFieldAge}: ${data.get("age") || t.telegramNotSpecified}`,
+          `${t.telegramFieldCity}: ${data.get("city") || t.telegramNotSpecified}`,
+          `${t.telegramFieldDiscipline}: ${data.get("discipline") || t.telegramNotSpecified}`,
+          `${t.telegramFieldContact}: ${data.get("contact") || t.telegramNotSpecified}`,
+          `${t.telegramFieldTelegram}: ${data.get("telegram") || t.telegramNotSpecifiedMasc}`,
+          `${t.telegramFieldCoach}: ${data.get("coach") || t.telegramNotSpecifiedMasc}`,
+          `${t.telegramFieldWeight}: ${data.get("weight") || t.telegramNotSpecified}`,
+          `${t.telegramFieldArrival}: ${formatDate(arrival)}`,
+          `${t.telegramFieldDeparture}: ${formatDate(departure)}`,
+          `${t.telegramFieldLevel}: ${data.get("level") || t.telegramNotSpecifiedMasc}`,
+          `${t.telegramFieldGoal}: ${data.get("goal") || t.telegramNotSpecified}`,
+          `${t.telegramFieldRoom}: ${data.get("room") || t.telegramNotSpecifiedMasc}`,
+          `${t.telegramFieldRequests}: ${data.get("requests") || t.telegramNoExtraRequests}`
+        ].join("\n");
+
+        resultPanel.classList.add("is-visible");
+        currentResultState = "sending";
+        renderResultState();
+        resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+
+        submitButton.disabled = true;
+        submitButton.textContent = t.sendingButton;
+
+        try {
+          await sendTelegramMessage(message);
+          currentResultState = "success";
+          renderResultState();
+          form.reset();
+        } catch (error) {
+          currentResultState = "failure";
+          renderResultState();
+        } finally {
+          submitButton.disabled = false;
+          submitButton.textContent = translations[currentLang].submitButton;
+        }
+      });
+
+      applyTranslations(currentLang);
+    </script>
+  </body>
+</html>

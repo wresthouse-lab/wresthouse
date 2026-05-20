@@ -1,0 +1,12 @@
+{
+  "name": "local-plugins",
+  "owner": { "name": "local" },
+  "plugins": [
+    {
+      "name": "frontend-design",
+      "source": "./frontend-design",
+      "description": "Frontend design skill for UI/UX implementation",
+      "version": "1.0.0"
+    }
+  ]
+}
