@@ -3,6 +3,9 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <title>WrestHouse | Заявка на заселение</title>
     <meta
       name="description"
@@ -34,7 +37,7 @@
 
       body {
         margin: 0;
-        font-family: "Trebuchet MS", "Gill Sans", "Segoe UI", sans-serif;
+        font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
         color: var(--ink);
         background:
           radial-gradient(circle at top left, rgba(224, 170, 37, 0.2), transparent 24rem),
@@ -133,6 +136,32 @@
         text-decoration: none;
         color: rgba(12, 24, 48, 0.75);
         font-weight: 700;
+        padding: 8px 14px;
+        border-radius: 999px;
+        transition: background 160ms ease, color 160ms ease;
+      }
+
+      .topbar-link:hover {
+        background: rgba(12, 24, 48, 0.08);
+        color: var(--ink);
+      }
+
+      .instagram-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 999px;
+        color: rgba(12, 24, 48, 0.65);
+        transition: background 160ms ease, color 160ms ease, transform 160ms ease;
+        text-decoration: none;
+      }
+
+      .instagram-link:hover {
+        background: rgba(161, 36, 29, 0.1);
+        color: var(--mat-red);
+        transform: scale(1.1);
       }
 
       .lang-switcher {
@@ -435,13 +464,29 @@
       select,
       textarea {
         width: 100%;
-        border: 1px solid rgba(12, 24, 48, 0.14);
+        border: 1.5px solid rgba(12, 24, 48, 0.14);
         border-radius: 18px;
         padding: 15px 16px;
         font: inherit;
         color: var(--ink);
         background: rgba(255, 255, 255, 0.72);
         outline: none;
+        transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+      }
+
+      input:focus,
+      select:focus,
+      textarea:focus {
+        border-color: var(--mat-blue);
+        background: rgba(255, 255, 255, 0.92);
+        box-shadow: 0 0 0 3px rgba(31, 79, 155, 0.15);
+      }
+
+      input:hover:not(:focus),
+      select:hover:not(:focus),
+      textarea:hover:not(:focus) {
+        border-color: rgba(12, 24, 48, 0.28);
+        background: rgba(255, 255, 255, 0.82);
       }
 
       textarea {
@@ -470,6 +515,18 @@
         line-height: 1.5;
       }
 
+      .form-group-label {
+        grid-column: 1 / -1;
+        font-size: 0.78rem;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        color: rgba(12, 24, 48, 0.45);
+        padding-bottom: 2px;
+        border-bottom: 1px solid rgba(12, 24, 48, 0.1);
+        margin-top: 8px;
+      }
+
       .form-footer {
         display: flex;
         flex-wrap: wrap;
@@ -486,8 +543,54 @@
       }
 
       .submit-button {
-        padding: 16px 22px;
-        font-size: 1rem;
+        padding: 18px 36px;
+        font-size: 1.05rem;
+        letter-spacing: 0.04em;
+        box-shadow: 0 16px 32px rgba(161, 36, 29, 0.35);
+      }
+
+      .include-ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 8px;
+      }
+
+      .include-ul li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        color: rgba(12, 24, 48, 0.76);
+        line-height: 1.5;
+      }
+
+      .include-ul li::before {
+        content: "✓";
+        flex-shrink: 0;
+        font-weight: 800;
+        color: var(--mat-blue);
+        margin-top: 1px;
+      }
+
+      .include-card--highlight {
+        background: linear-gradient(135deg, rgba(31, 79, 155, 0.08), rgba(31, 79, 155, 0.04));
+        border-color: rgba(31, 79, 155, 0.2);
+      }
+
+      .include-card--highlight strong {
+        color: var(--ink);
+      }
+
+      .age-rule {
+        margin: 0 0 20px;
+        padding: 14px 18px;
+        border-radius: 18px;
+        background: rgba(31, 79, 155, 0.07);
+        border: 1px solid rgba(31, 79, 155, 0.18);
+        color: var(--ink-soft);
+        font-size: 0.93rem;
+        line-height: 1.55;
       }
 
       .result-panel {
@@ -605,6 +708,13 @@
         </div>
         <div class="topbar-controls">
           <a class="topbar-link" href="#application" data-i18n="jumpToForm">Перейти к заявке</a>
+          <a class="instagram-link" href="https://www.instagram.com/wresthouse" target="_blank" rel="noopener noreferrer" aria-label="Instagram WrestHouse">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="2" y="2" width="20" height="20" rx="6" stroke="currentColor" stroke-width="1.8"/>
+              <circle cx="12" cy="12" r="4.5" stroke="currentColor" stroke-width="1.8"/>
+              <circle cx="17.5" cy="6.5" r="1" fill="currentColor"/>
+            </svg>
+          </a>
           <div class="lang-switcher" aria-label="Language switcher">
             <button class="lang-button is-active" type="button" data-lang="ru" aria-pressed="true">RU</button>
             <button class="lang-button" type="button" data-lang="en" aria-pressed="false">EN</button>
@@ -672,9 +782,19 @@
           </p>
 
           <div class="include-list">
+            <div class="include-card include-card--highlight">
+              <strong data-i18n="personalCoachTitle">Персональный тренер из школы борьбы</strong>
+              <p data-i18n="personalCoachText">За каждым спортсменом закрепляется тренер Академии спорта им. Сайтиева Б.Х. для индивидуальной работы во время тренировок. Подход строится под уровень и цели конкретного спортсмена.</p>
+            </div>
             <div class="include-card">
               <strong data-i18n="includeTitle">Что входит</strong>
-              <p data-i18n="includeText">Проживание, спортивная среда, распределение по уровню, связь с администратором по размещению и организационным вопросам.</p>
+              <ul class="include-ul">
+                <li data-i18n="includeItem1">Комфортное проживание</li>
+                <li data-i18n="includeItem2">Трёхразовое питание</li>
+                <li data-i18n="includeItem3">Утренняя тренировка на стадионе</li>
+                <li data-i18n="includeItem4">Вечерняя основная тренировка в группе с олимпийским чемпионом Адамом Сайтиевым</li>
+                <li data-i18n="includeItem5">Транспорт, сопровождение 24/7</li>
+              </ul>
             </div>
             <div class="include-card">
               <strong data-i18n="trustTitle">Среда чемпионов</strong>
@@ -723,10 +843,11 @@
           <p data-i18n="formDescription">
             Укажите данные спортсмена, вид спорта, даты приезда и важные детали по проживанию. После этого останется только отправить готовую заявку администратору.
           </p>
-          <p class="helper" data-i18n="minorRule">Важно: если спортсмену меньше 15 лет, заселение возможно только вместе с личным тренером или сопровождающим.</p>
+          <p class="age-rule" data-i18n="minorRule">✓ Спортсмены от 15 лет принимаются без тренера и сопровождающего. Спортсменам до 15 лет необходим личный тренер или сопровождающий.</p>
 
           <form id="application-form">
             <div class="form-grid">
+              <div class="form-group-label">О спортсмене</div>
               <div class="field">
                 <label for="fullName" data-i18n="labelFullName">ФИО спортсмена</label>
                 <input id="fullName" name="fullName" type="text" required placeholder="Магомед Алиев" />
@@ -744,21 +865,15 @@
                 <input id="discipline" name="discipline" type="text" required placeholder="Вольная борьба" />
               </div>
               <div class="field">
-                <label for="contact" data-i18n="labelContact">Телефон / WhatsApp</label>
-                <input id="contact" name="contact" type="text" required placeholder="+7 999 123-45-67" />
-              </div>
-              <div class="field">
-                <label for="telegram" data-i18n="labelTelegram">Telegram</label>
-                <input id="telegram" name="telegram" type="text" placeholder="@magomed_aliyev" />
+                <label for="weight" data-i18n="labelWeight">Весовая категория</label>
+                <input id="weight" name="weight" type="text" required placeholder="65 кг" />
               </div>
               <div class="field">
                 <label for="coach" data-i18n="labelCoach">Тренер / сопровождающий</label>
                 <input id="coach" name="coach" type="text" placeholder="Ибрагим Магомедов" />
               </div>
-              <div class="field">
-                <label for="weight" data-i18n="labelWeight">Весовая категория</label>
-                <input id="weight" name="weight" type="text" required placeholder="65 кг" />
-              </div>
+
+              <div class="form-group-label">Даты и формат</div>
               <div class="field">
                 <label for="arrival" data-i18n="labelArrival">Дата заезда</label>
                 <input id="arrival" name="arrival" type="date" required />
@@ -797,6 +912,17 @@
                   <option data-i18n="optionRoomAny">Подойдёт любой вариант</option>
                 </select>
               </div>
+              <div class="form-group-label">Контакт</div>
+              <div class="field">
+                <label for="contact" data-i18n="labelContact">Телефон / WhatsApp</label>
+                <input id="contact" name="contact" type="text" required placeholder="+7 999 123-45-67" />
+              </div>
+              <div class="field">
+                <label for="telegram" data-i18n="labelTelegram">Telegram</label>
+                <input id="telegram" name="telegram" type="text" placeholder="@magomed_aliyev" />
+              </div>
+
+              <div class="form-group-label">Дополнительно</div>
               <div class="field full">
                 <label for="requests" data-i18n="labelRequests">Пожелания и детали</label>
                 <textarea
@@ -863,7 +989,11 @@
           whatToIncludeTitle: "Что указать",
           whatToIncludeDesc: "Заполните основные данные о спортсмене, чтобы мы быстрее подтвердили заселение и помогли подобрать удобный вариант проживания.",
           includeTitle: "Что входит",
-          includeText: "Проживание, спортивная среда, распределение по уровню, связь с администратором по размещению и организационным вопросам.",
+          includeItem1: "Комфортное проживание",
+          includeItem2: "Трёхразовое питание",
+          includeItem3: "Утренняя тренировка на стадионе",
+          includeItem4: "Вечерняя основная тренировка в группе с олимпийским чемпионом Адамом Сайтиевым",
+          includeItem5: "Транспорт, сопровождение 24/7",
           trustTitle: "Среда чемпионов",
           trustText: "Хасавюрт — одна из самых сильных школ вольной борьбы. Здесь растут победители, а высокий уровень окружения задаёт темп каждому спортсмену.",
           afterApplyTitle: "Что будет после заявки",
@@ -882,7 +1012,9 @@
           noteImportantText: "Особенно внимательно проверьте даты, контакты и дополнительные пожелания по проживанию или сопровождению.",
           formTitle: "Заполнить заявку",
           formDescription: "Укажите данные спортсмена, вид спорта, даты приезда и важные детали по проживанию. После этого останется только отправить готовую заявку администратору.",
-          minorRule: "Важно: если спортсмену меньше 15 лет, заселение возможно только вместе с личным тренером или сопровождающим.",
+          personalCoachTitle: "Персональный тренер из школы борьбы",
+          personalCoachText: "За каждым спортсменом закрепляется тренер Академии спорта им. Сайтиева Б.Х. для индивидуальной работы во время тренировок. Подход строится под уровень и цели конкретного спортсмена.",
+          minorRule: "✓ Спортсмены от 15 лет принимаются без тренера и сопровождающего. Спортсменам до 15 лет необходим личный тренер или сопровождающий.",
           labelFullName: "ФИО спортсмена",
           labelAge: "Возраст",
           labelCity: "Город / страна",
@@ -976,7 +1108,11 @@
           whatToIncludeTitle: "What to include",
           whatToIncludeDesc: "Fill in the main information about the athlete so we can confirm accommodation faster and offer the best stay option.",
           includeTitle: "What is included",
-          includeText: "Accommodation, sports environment, level-based group placement, and direct contact with the administrator about stay and organization.",
+          includeItem1: "Comfortable accommodation",
+          includeItem2: "Three meals a day",
+          includeItem3: "Morning training session at the stadium",
+          includeItem4: "Evening main training session with Olympic champion Adam Saitiev",
+          includeItem5: "Transport & 24/7 support",
           trustTitle: "Champions' environment",
           trustText: "Khasavyurt is one of the strongest centers of freestyle wrestling. Winners grow here, and the level of the environment pushes every athlete higher.",
           afterApplyTitle: "What happens next",
@@ -995,7 +1131,9 @@
           noteImportantText: "Please carefully check dates, contacts, and any additional requests related to accommodation or support.",
           formTitle: "Fill out the application",
           formDescription: "Provide the athlete's details, sport, travel dates, and important accommodation notes. After that, the application will be sent to the administrator.",
-          minorRule: "Important: if the athlete is under 15 years old, accommodation is only possible with a personal coach or accompanying adult.",
+          personalCoachTitle: "Personal coach from the wrestling school",
+          personalCoachText: "Each athlete is assigned a personal coach from the B.H. Saitiev Sports Academy for individualized training. The approach is tailored to the level and goals of each specific athlete.",
+          minorRule: "✓ Athletes aged 15 and above are accepted without a coach or accompanying adult. Athletes under 15 require a personal coach or accompanying adult.",
           labelFullName: "Athlete full name",
           labelAge: "Age",
           labelCity: "City / country",
@@ -1219,6 +1357,26 @@
       });
 
       applyTranslations(currentLang);
+
+      const toInputDate = (d) => d.toISOString().slice(0, 10);
+      const arrivalInput   = document.getElementById("arrival");
+      const departureInput = document.getElementById("departure");
+      const defaultArrival  = new Date("2026-06-01");
+      const defaultDeparture = new Date(defaultArrival);
+      defaultDeparture.setDate(defaultDeparture.getDate() + 14);
+      arrivalInput.value   = toInputDate(defaultArrival);
+      arrivalInput.min     = toInputDate(new Date());
+      departureInput.value = toInputDate(defaultDeparture);
+      arrivalInput.addEventListener("change", () => {
+        const minDep = new Date(arrivalInput.value);
+        minDep.setDate(minDep.getDate() + 1);
+        departureInput.min = toInputDate(minDep);
+        if (departureInput.value && new Date(departureInput.value) <= new Date(arrivalInput.value)) {
+          const auto = new Date(arrivalInput.value);
+          auto.setDate(auto.getDate() + 14);
+          departureInput.value = toInputDate(auto);
+        }
+      });
     </script>
   </body>
 </html>
