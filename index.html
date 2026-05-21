@@ -959,9 +959,7 @@
     </div>
 
     <script>
-      const TELEGRAM_BOT_TOKEN = "8615710154:AAE0tQIMz1UBLAzS-FXh6iVEUsQkhN9bH_M";
-      const TELEGRAM_CHAT_ID = "708300138";
-      const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+      const SUBMIT_URL = "http://83.217.203.231:5000/submit";
       const LANGUAGE_STORAGE_KEY = "wresthouse-language";
 
       const translations = {
@@ -1276,16 +1274,17 @@
         button.addEventListener("click", () => applyTranslations(button.dataset.lang));
       });
 
-      const sendTelegramMessage = async (text) => {
-        const response = await fetch(TELEGRAM_API_URL, {
+      const sendTelegramMessage = async (_, formData) => {
+        const body = {};
+        for (const [k, v] of formData.entries()) body[k] = v;
+        const response = await fetch(SUBMIT_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ chat_id: TELEGRAM_CHAT_ID, text })
+          body: JSON.stringify(body)
         });
-
-        if (!response.ok) throw new Error(`Telegram API responded with status ${response.status}`);
+        if (!response.ok) throw new Error(`Server responded with status ${response.status}`);
         const payload = await response.json();
-        if (!payload.ok) throw new Error(payload.description || "Telegram API returned an error");
+        if (!payload.ok) throw new Error("Server returned an error");
         return payload;
       };
 
@@ -1343,7 +1342,7 @@
         submitButton.textContent = t.sendingButton;
 
         try {
-          await sendTelegramMessage(message);
+          await sendTelegramMessage(message, data);
           currentResultState = "success";
           renderResultState();
           form.reset();
