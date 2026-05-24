@@ -1049,6 +1049,7 @@
           resultStateIdle: { box: "Ожидаем отправку заявки.", note: "Детали заявки получает только администратор." },
           resultStateDateError: { box: "Проверьте заявку: дата выезда не может быть раньше даты заезда.", note: "Исправьте данные и отправьте заявку ещё раз." },
           resultStateAgeError: { box: "Для спортсменов младше 15 лет нужно указать личного тренера или сопровождающего.", note: "Добавьте данные сопровождающего и отправьте заявку ещё раз." },
+          resultStatePhoneError: { box: "Укажите номер телефона в международном формате.", note: "Добавьте код страны в начало номера: +7 для России, +994 для Азербайджана, +998 для Узбекистана и т.д." },
           resultStateSending: { box: "Заявка отправляется. Пожалуйста, подождите до 30 секунд.", note: "Идёт отправка заявки администратору." },
           resultStateSuccess: { box: "Спасибо! Ваша заявка успешно отправлена.", note: "Администратор получил заявку и свяжется с вами после проверки." },
           resultStateTimeout: { box: "Заявка отправлена. Ожидайте ответа от администратора.", note: "Сервер работает медленно, но заявка получена. Мы свяжемся с вами в ближайшее время." },
@@ -1168,6 +1169,7 @@
           resultDescription: "After submission, only a confirmation message will be shown here.",
           resultStateIdle: { box: "Waiting for application submission.", note: "Only the administrator sees the application details." },
           resultStateDateError: { box: "Please check the application: the departure date cannot be earlier than the arrival date.", note: "Correct the data and submit the application again." },
+          resultStatePhoneError: { box: "Please enter your phone number in international format.", note: "Add your country code at the start: +7 for Russia, +994 for Azerbaijan, +998 for Uzbekistan, etc." },
           resultStateAgeError: { box: "For athletes under 15 years old, a personal coach or accompanying adult must be specified.", note: "Add the accompanying person's details and submit the application again." },
           resultStateSending: { box: "Your application is being sent. Please wait up to 30 seconds.", note: "The application is being delivered to the administrator." },
           resultStateSuccess: { box: "Thank you! Your application has been sent successfully.", note: "The administrator has received the application and will contact you after review." },
@@ -1314,6 +1316,16 @@
           currentResultState = "dateError";
           renderResultState();
           resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+          return;
+        }
+
+        const contact = String(data.get("contact") || "").trim();
+        if (contact && !contact.startsWith("+")) {
+          resultPanel.classList.add("is-visible");
+          currentResultState = "phoneError";
+          renderResultState();
+          resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+          document.getElementById("contact").focus();
           return;
         }
 
