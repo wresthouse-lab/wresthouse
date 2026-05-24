@@ -1050,7 +1050,8 @@
           resultStateDateError: { box: "Проверьте заявку: дата выезда не может быть раньше даты заезда.", note: "Исправьте данные и отправьте заявку ещё раз." },
           resultStateAgeError: { box: "Для спортсменов младше 15 лет нужно указать личного тренера или сопровождающего.", note: "Добавьте данные сопровождающего и отправьте заявку ещё раз." },
           resultStatePhoneError: { box: "Проверьте номер телефона.", note: "Номер должен начинаться с кода страны и содержать все цифры. Примеры: +7 999 123-45-67 (Россия), +998 90 123 45 67 (Узбекистан)." },
-          resultStateSending: { box: "Заявка отправляется. Пожалуйста, подождите до 30 секунд.", note: "Идёт отправка заявки администратору." },
+          resultStateTelegramError: { box: "Укажите Telegram через @.", note: "Никнейм в Telegram должен начинаться с @. Например: @magomed_aliyev" },
+          resultStateSending: { box: "Заявка отправляется. Пожалуйста, подождите до 30 секунд.", note: "Не закрывайте страницу — идёт отправка заявки администратору." },
           resultStateSuccess: { box: "Спасибо! Ваша заявка успешно отправлена.", note: "Администратор получил заявку и свяжется с вами после проверки." },
           resultStateTimeout: { box: "Заявка отправлена. Ожидайте ответа от администратора.", note: "Сервер работает медленно, но заявка получена. Мы свяжемся с вами в ближайшее время." },
           resultStateFailure: { box: "Не удалось отправить заявку автоматически.", note: "Попробуйте ещё раз или напишите нам напрямую в Instagram: <a href=\"https://www.instagram.com/wresthouse\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:inherit;font-weight:600;\">@wresthouse</a>" },
@@ -1170,8 +1171,9 @@
           resultStateIdle: { box: "Waiting for application submission.", note: "Only the administrator sees the application details." },
           resultStateDateError: { box: "Please check the application: the departure date cannot be earlier than the arrival date.", note: "Correct the data and submit the application again." },
           resultStatePhoneError: { box: "Please check your phone number.", note: "The number must start with a country code and include all digits. Examples: +7 999 123-45-67 (Russia), +33 6 12 34 56 78 (France), +1 212 123-4567 (USA)." },
+          resultStateTelegramError: { box: "Please enter your Telegram username with @.", note: "Your Telegram username must start with @. For example: @adamjohnson" },
           resultStateAgeError: { box: "For athletes under 15 years old, a personal coach or accompanying adult must be specified.", note: "Add the accompanying person's details and submit the application again." },
-          resultStateSending: { box: "Your application is being sent. Please wait up to 30 seconds.", note: "The application is being delivered to the administrator." },
+          resultStateSending: { box: "Your application is being sent. Please wait up to 30 seconds.", note: "Do not close this page — the application is being delivered to the administrator." },
           resultStateSuccess: { box: "Thank you! Your application has been sent successfully.", note: "The administrator has received the application and will contact you after review." },
           resultStateTimeout: { box: "Application sent. Please await a response from the administrator.", note: "The server is running slowly, but your application was received. We will contact you soon." },
           resultStateFailure: { box: "The application could not be sent automatically.", note: "Please try again or contact us directly on Instagram: <a href=\"https://www.instagram.com/wresthouse\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:inherit;font-weight:600;\">@wresthouse</a>" },
@@ -1322,7 +1324,7 @@
         const contact = String(data.get("contact") || "").trim();
         if (contact) {
           const digits = contact.replace(/\D/g, "");
-          if (!contact.startsWith("+") || digits.length < 10 || digits.length > 15) {
+          if (!contact.startsWith("+") || digits.length < 11 || digits.length > 15) {
             resultPanel.classList.add("is-visible");
             currentResultState = "phoneError";
             renderResultState();
@@ -1330,6 +1332,16 @@
             document.getElementById("contact").focus();
             return;
           }
+        }
+
+        const telegram = String(data.get("telegram") || "").trim();
+        if (telegram && !telegram.startsWith("@")) {
+          resultPanel.classList.add("is-visible");
+          currentResultState = "telegramError";
+          renderResultState();
+          resultPanel.scrollIntoView({ behavior: "smooth", block: "start" });
+          document.getElementById("telegram").focus();
+          return;
         }
 
         if (age < 15 && !coach) {
