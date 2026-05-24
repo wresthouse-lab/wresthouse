@@ -1051,7 +1051,7 @@
           resultStateAgeError: { box: "Для спортсменов младше 15 лет нужно указать личного тренера или сопровождающего.", note: "Добавьте данные сопровождающего и отправьте заявку ещё раз." },
           resultStateSending: { box: "Заявка отправляется. Пожалуйста, подождите несколько секунд.", note: "Идёт отправка заявки администратору." },
           resultStateSuccess: { box: "Спасибо! Ваша заявка успешно отправлена.", note: "Администратор получил заявку и свяжется с вами после проверки." },
-          resultStateFailure: { box: "Не удалось отправить заявку автоматически.", note: "Попробуйте ещё раз чуть позже или свяжитесь с администратором напрямую." },
+          resultStateFailure: { box: "Не удалось отправить заявку автоматически.", note: "Попробуйте ещё раз или напишите нам напрямую в Instagram: <a href=\"https://www.instagram.com/wresthouse\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:inherit;font-weight:600;\">@wresthouse</a>" },
           telegramMessageTitle: "Заявка на заселение WrestHouse",
           telegramFieldFullName: "ФИО",
           telegramFieldAge: "Возраст",
@@ -1170,7 +1170,7 @@
           resultStateAgeError: { box: "For athletes under 15 years old, a personal coach or accompanying adult must be specified.", note: "Add the accompanying person's details and submit the application again." },
           resultStateSending: { box: "Your application is being sent. Please wait a few seconds.", note: "The application is being delivered to the administrator." },
           resultStateSuccess: { box: "Thank you! Your application has been sent successfully.", note: "The administrator has received the application and will contact you after review." },
-          resultStateFailure: { box: "The application could not be sent automatically.", note: "Please try again later or contact the administrator directly." },
+          resultStateFailure: { box: "The application could not be sent automatically.", note: "Please try again or contact us directly on Instagram: <a href=\"https://www.instagram.com/wresthouse\" target=\"_blank\" rel=\"noopener noreferrer\" style=\"color:inherit;font-weight:600;\">@wresthouse</a>" },
           telegramMessageTitle: "WrestHouse accommodation application",
           telegramFieldFullName: "Full name",
           telegramFieldAge: "Age",
@@ -1227,7 +1227,7 @@
         const stateKey = `resultState${currentResultState.charAt(0).toUpperCase()}${currentResultState.slice(1)}`;
         const state = translations[currentLang][stateKey];
         resultBox.textContent = state.box;
-        resultNote.textContent = state.note;
+        resultNote.innerHTML = state.note;
       };
 
       const applyTranslations = (lang) => {
@@ -1276,15 +1276,35 @@
       const sendTelegramMessage = async (_, formData) => {
         const body = {};
         for (const [k, v] of formData.entries()) body[k] = v;
-        const response = await fetch(SUBMIT_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
-        });
-        if (!response.ok) throw new Error(`Server responded with status ${response.status}`);
-        const payload = await response.json();
-        if (!payload.ok) throw new Error("Server returned an error");
-        return payload;
+        const jsonBody = JSON.stringify(body);
+        const MAX_ATTEMPTS = 3;
+        const TIMEOUT_MS = 10000;
+        let lastError;
+        for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+          try {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
+            let response;
+            try {
+              response = await fetch(SUBMIT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: jsonBody,
+                signal: controller.signal
+              });
+            } finally {
+              clearTimeout(timer);
+            }
+            if (!response.ok) throw new Error(`Server responded with status ${response.status}`);
+            const payload = await response.json();
+            if (!payload.ok) throw new Error("Server returned an error");
+            return payload;
+          } catch (err) {
+            lastError = err;
+            if (attempt < MAX_ATTEMPTS) await new Promise(r => setTimeout(r, 1500 * attempt));
+          }
+        }
+        throw lastError;
       };
 
       form.addEventListener("submit", async (event) => {
